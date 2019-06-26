@@ -182,7 +182,7 @@ do
             shift # past argument
             shift # past value
         ;;
-        --app)
+        --app|--appName)
             app="${2}"
             shift # past argument
             shift # past value
@@ -196,7 +196,6 @@ do
     esac
 done
 
-echo $app
 verify $app
 
 . $HOME/.bash_profile
