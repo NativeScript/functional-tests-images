@@ -37,3 +37,14 @@ template-tab-navigation-ts/
 tests-app-ng/
 testsapptransitions/
 uitests/
+
+# Stable 
+AngularApp/
+JavaScriptApp/
+TypeScriptApp/
+app/
+images/
+ngtests/
+perf/
+perf_to_delete/
+tests/
