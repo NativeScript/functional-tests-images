@@ -48,3 +48,5 @@ ngtests/
 perf/
 perf_to_delete/
 tests/
+nativescriptuitests-map/
+nativescriptuitests/
