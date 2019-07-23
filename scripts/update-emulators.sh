@@ -8,14 +8,19 @@ verify() {
     for emu in ${PWD}/$1/* ; do
         emuname="$(basename $emu)"
         echo $test
-        if [[ ! $existing_emulators =~ $emuname ]]; then
-            echo "Emulator NOT found: " $emuname;
-            create $emuname
-        else
-            echo "Emulator: $emuname exists!";
-        fi
         
-        find ~/.android/avd/$emuname.avd -type f -name 'config.ini' -exec bash -c 'echo $0 && echo "hw.lcd.density=240" | tee -a $0 && echo "skin.name=480x800" | tee -a $0 && echo "hw.gpu.enabled=yes"  | tee -a $0 && echo "hw.keyboard=no" | tee -a $0 && cat $0 '  {} \;
+        if [[ $emuname == *"iPhone"*  ]]; then
+            echo "Skipping: simulators " $emuname;
+        else
+            if [[ ! $existing_emulators =~ $emuname ]]; then
+                echo "Emulator NOT found: " $emuname;
+                create $emuname
+            else
+                echo "Emulator: $emuname exists!";
+            fi
+            
+            find ~/.android/avd/$emuname.avd -type f -name 'config.ini' -exec bash -c 'echo $0 && echo "hw.lcd.density=240" | tee -a $0 && echo "skin.name=480x800" | tee -a $0 && echo "hw.gpu.enabled=yes"  | tee -a $0 && echo "hw.keyboard=no" | tee -a $0 && cat $0 '  {} \;
+        fi
     done
 }
 
@@ -27,11 +32,20 @@ print_and_execute() {
 update_system_images() {
     for emu in ${PWD}/$1/* ; do
         emuname="$(basename $emu)"
-        echo $test
-        if [[ ! $existing_emulators =~ $emuname ]]; then
-            download_system_image $emuname
+        existing_emulators=$($ANDROID_HOME/tools/emulator -list-avds)
+        
+        if [[ $emuname == *"iPhone"* || $emuname == *"scripts"* ]]; then
+            echo "Skipping: simulators " $emuname;
         else
-            echo "adv exists: $emuname exists!";
+            echo "Emulator to update: ${emuname}"
+        
+            if [[ ! $existing_emulators =~ $emuname ]]; then
+                download_system_image $emuname
+            else
+                echo "adv exists: $emuname exists!";
+            fi
+
+            find ~/.android/avd/$emuname.avd -type f -name 'config.ini' -exec bash -c 'echo $0 && echo "hw.lcd.density=240" | tee -a $0 && echo "skin.name=480x800" | tee -a $0 && echo "hw.gpu.enabled=yes"  | tee -a $0 && echo "hw.keyboard=no" | tee -a $0 && cat $0 '  {} \;
         fi
     done
 }
@@ -96,6 +110,7 @@ download_system_image(){
 }
 
 create() {
+    echo "Creating emulator $1"
     case "$1" in
         "Emulator-Api17-Default")
             echo no | $ANDROID_HOME/tools/bin/avdmanager create avd -n "$1" -k "system-images;android-17;default;x86" -b default/x86 -c 900M -f
@@ -162,40 +177,45 @@ create() {
                 Emulator-Api25-Google|
                 Emulator-Api26-Google|
                 Emulator-Api27-Google|
-                Emulator-Api28-Google|all}"
+            Emulator-Api28-Google|all}"
             exit 1
     esac
 }
 
 if [ $# -eq 0 ]
-  then
+then
     echo "No arguments supplied. Provide --app [appName]!"
     exit 1
 fi
 
+export shouldUpdateImages=false
 while [[ $# -gt 0 ]]
 do
     key="${1}"
     case ${key} in
-        -u|--should_update_system_images)
-            update_system_images
+        -u|--update-system-images)
+            echo "Using: --update-system-images"
+            export shouldUpdateImages=true
             shift # past argument
-            shift # past value
         ;;
         --app|--appName)
             app="${2}"
             shift # past argument
             shift # past value
         ;;
-        *) 
+        *)
             echo "Unknow option ${1}"
-            echo $"Usage: $0 --app [appName] -u|--should_update_system_images"
+            echo $"Usage: $0 --app [appName] -u|--update-system-images"
             exit 1
             shift
         ;;
     esac
 done
 
-verify $app
+if [[ shouldUpdateImages ]]; then
+    update_system_images $app
+else
+    verify $app
+fi
 
 . $HOME/.bash_profile
