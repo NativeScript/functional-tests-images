@@ -50,3 +50,7 @@ perf_to_delete/
 tests/
 nativescriptuitests-map/
 nativescriptuitests/
+
+#ignore images
+**/**/*_actual.png
+
