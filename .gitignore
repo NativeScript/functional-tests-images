@@ -38,46 +38,6 @@ tests-app-ng/
 testsapptransitions/
 uitests/
 
-.DS_Store
-animations/
-cutenessio/
-ent-auth-js-android24/
-ent-auth-ts-android24/
-enterprise-auth-ts-ios11/
-galleryapp/
-groceries/
-qsf/
-sdk/
-sdkangularexamples-map/
-sdkangularexamples/
-sdkexamples-map/
-sdkexamples/
-template-drawer-navigation-js/
-template-drawer-navigation-ng/
-template-drawer-navigation-ts/
-template-drawer-navigation-vue/
-template-enterprise-auth-js/
-template-enterprise-auth-ng/
-template-enterprise-auth-ts/
-template-health-survey-ng/
-template-hello-world-js/
-template-hello-world-ng/
-template-hello-world-ts/
-template-master-detail-js/
-template-master-detail-kinvey-js/
-template-master-detail-kinvey-ng/
-template-master-detail-kinvey-ts/
-template-master-detail-ng/
-template-master-detail-ts/
-template-master-detail-vue/
-template-patient-care-ng/
-template-tab-navigation-js/
-template-tab-navigation-ng/
-template-tab-navigation-ts/
-tests-app-ng/
-testsapptransitions/
-uitests/
-
 # Stable 
 AngularApp/
 JavaScriptApp/
@@ -93,3 +53,4 @@ nativescriptuitests/
 
 #ignore images
 **/**/*_actual.png
+
